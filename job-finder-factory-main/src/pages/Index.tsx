@@ -1,76 +1,113 @@
+import { useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { Element } from "react-scroll";
+import HeroSection from "@/components/hunting-parallax/sections/HeroSection";
+import FeaturesSection from "@/components/hunting-parallax/sections/FeaturesSection";
+import ReviewsSection from "@/components/hunting-parallax/sections/ReviewsSection";
+import FAQSection from "@/components/hunting-parallax/sections/FAQSection";
+import ContactSection from "@/components/hunting-parallax/sections/ContactSection";
+import JourneySection from "@/components/hunting-parallax/sections/JourneySection";
+import JobCarouselSection from "@/components/hunting-parallax/sections/JobCarouselSection";
+import BackgroundShapes from "@/components/hunting-parallax/BackgroundShapes";
+import ThemeToggle from "@/components/hunting-parallax/ThemeToggle";
+import ScrollToTop from "@/components/hunting-parallax/ScrollToTop";
+import ParallaxSection from "@/components/hunting-parallax/ParallaxSection";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Briefcase, Building2, GraduationCap, LineChart } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Index() {
-  const features = [
-    {
-      icon: <Briefcase className="h-8 w-8 text-[#00e887]" />,
-      title: "Smart Job Matching",
-      description: "Find the perfect job match with our AI-powered search algorithm",
-    },
-    {
-      icon: <Building2 className="h-8 w-8 text-[#00e887]" />,
-      title: "Company Insights",
-      description: "Get detailed insights about potential employers",
-    },
-    {
-      icon: <GraduationCap className="h-8 w-8 text-[#00e887]" />,
-      title: "Career Growth",
-      description: "Access resources to accelerate your career development",
-    },
-    {
-      icon: <LineChart className="h-8 w-8 text-[#00e887]" />,
-      title: "Salary Analytics",
-      description: "Compare salaries across industries and locations",
-    },
-  ];
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    const root = window.document.documentElement;
+    root.classList.remove("light", "dark");
+    root.classList.add(savedTheme);
+
+    if (!localStorage.getItem("darkModeMessageShown") && savedTheme === "light") {
+      toast({
+        title: "Hey there!!",
+        description: "You can use our dark mode, it's cooler!",
+        duration: 5000,
+      });
+      localStorage.setItem("darkModeMessageShown", "true");
+    }
+  }, [toast]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#f0fdf4] to-white">
-      <main className="container mx-auto px-4">
-        {/* Hero Section */}
-        <div className="relative py-24 text-center space-y-6">
-          {/* Background Layers */}
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=2400&q=80')] opacity-5 bg-cover bg-center pointer-events-none" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#f0fdf4] via-transparent to-white pointer-events-none" />
-          </div>
+    <div className="relative">
+      <BackgroundShapes />
+      <ThemeToggle />
+      <ScrollToTop />
+      
+      <Element name="hero">
+        <ParallaxSection>
+          <HeroSection />
+        </ParallaxSection>
+      </Element>
 
-          {/* Content */}
-          <h1 className="text-5xl font-bold tracking-tight max-w-3xl mx-auto animate-fade-up">
-            Find Your Dream Career with OnTheHunt
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto animate-fade-up delay-100">
-            Intelligent job matching, AI-powered resume building, and personalized career guidance all in one place.
-          </p>
-          <div className="relative flex justify-center gap-4 pt-4 animate-fade-up delay-200">
-            {/* Find Jobs Button */}
-            <a href="/find-jobs">
-              <Button size="lg" className="bg-[#00e887] text-white hover:bg-[#00e887]/90">
-                Find Jobs <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </a>
-            {/* Learn More Button */}
-            <Button size="lg" variant="outline" className="relative z-10">
-              Learn More
-            </Button>
-          </div>
-        </div>
+      <Element name="features">
+        <ParallaxSection offset={30}>
+          <FeaturesSection />
+        </ParallaxSection>
+      </Element>
 
-        {/* Features Section */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 py-16 animate-fade-up delay-400">
-          {features.map((feature) => (
-            <div
-              key={feature.title}
-              className="p-6 rounded-xl bg-white shadow-lg hover:shadow-xl transition-shadow border border-gray-100 hover:border-[#00e887]/20"
-            >
-              <div className="mb-4">{feature.icon}</div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
+      <Element name="platform">
+        <div id="learn-more" className="max-w-4xl mx-auto p-8 glass-card my-20">
+          <h2 className="text-3xl font-bold mb-6">Why Choose Our Platform?</h2>
+          <div className="grid gap-8 text-left">
+            <div>
+              <h3 className="text-xl font-semibold mb-2">AI-Powered Resume Building</h3>
+              <p>Our advanced AI technology helps you create professional resumes tailored to your industry and experience level. Get personalized suggestions and formatting options that make your resume stand out.</p>
             </div>
-          ))}
+            <div>
+              <h3 className="text-xl font-semibold mb-2">Smart Job Matching</h3>
+              <p>Our intelligent algorithm analyzes your skills and preferences to match you with the perfect job opportunities. Save time by focusing on positions that align with your career goals.</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-2">Career Development Resources</h3>
+              <p>Access a wealth of resources including interview preparation guides, salary negotiation tips, and industry insights to help you advance in your career.</p>
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold mb-2">Professional Network</h3>
+              <p>Connect with industry professionals, mentors, and potential employers. Build meaningful relationships that can help accelerate your career growth.</p>
+            </div>
+          </div>
+          
+          <div className="mt-8 flex justify-center gap-4">
+            <Link to="/signup">
+              <Button className="bg-primary text-white hover:bg-primary/90">
+                Sign Up
+              </Button>
+            </Link>
+            <Link to="/learn-more">
+              <Button variant="outline">
+                Learn More
+              </Button>
+            </Link>
+          </div>
         </div>
-      </main>
+      </Element>
+
+      <Element name="jobs">
+        <JobCarouselSection />
+      </Element>
+
+      <Element name="testimonials">
+        <ReviewsSection />
+      </Element>
+
+      <Element name="faq">
+        <FAQSection />
+      </Element>
+
+      <Element name="contact">
+        <ContactSection />
+      </Element>
+
+      <Element name="journey">
+        <JourneySection />
+      </Element>
     </div>
   );
 }

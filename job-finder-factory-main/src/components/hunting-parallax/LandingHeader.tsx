@@ -89,7 +89,7 @@ export default function LandingHeader() {
     >
       <div className="container mx-auto flex items-center justify-between">
         <Link to="/">
-          <Logo size="md" variant="animated" />
+          <Logo size="md" variant="animated" className="logo-image animated" />
         </Link>
         
         <div className="hidden md:flex items-center space-x-6">

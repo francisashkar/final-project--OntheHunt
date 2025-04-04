@@ -9,32 +9,31 @@ export default function ThemeToggle() {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check if user has a theme preference
-    const savedTheme = localStorage.getItem("theme") || "light";
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    // Check localStorage for theme preference
+    const savedTheme = localStorage.getItem("theme");
     
-    // Set initial theme state based on localStorage or system preference
-    const initialDarkMode = savedTheme === "dark" || (savedTheme === null && prefersDark);
-    setIsDarkMode(initialDarkMode);
+    // Check if we should preserve the theme (coming from Learn More page)
+    const shouldPreserveTheme = localStorage.getItem("preserveTheme") === "true";
     
-    // Apply the theme to the document
-    applyTheme(initialDarkMode);
+    if (shouldPreserveTheme) {
+      // If preserving, use the current theme (which is already applied)
+      const currentIsDark = document.documentElement.classList.contains("dark");
+      setIsDarkMode(currentIsDark);
+      localStorage.removeItem("preserveTheme");
+    } else {
+      // Otherwise apply the theme from localStorage, defaulting to light
+      const initialDarkMode = savedTheme === "dark";
+      setIsDarkMode(initialDarkMode);
+      
+      // Apply the theme to the document (defaulting to light)
+      applyTheme(initialDarkMode);
+    }
   }, []);
 
   const toggleTheme = () => {
     const newDarkMode = !isDarkMode;
     setIsDarkMode(newDarkMode);
     applyTheme(newDarkMode);
-    
-    // Show toast when switching to dark mode
-    if (newDarkMode && !localStorage.getItem("darkModeMessageShown")) {
-      toast({
-        title: "Dark mode activated!",
-        description: "You can toggle between light and dark mode anytime.",
-        duration: 5000,
-      });
-      localStorage.setItem("darkModeMessageShown", "true");
-    }
   };
 
   const applyTheme = (darkMode: boolean) => {

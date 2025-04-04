@@ -311,7 +311,9 @@ function StatCard({ icon, value, label, description }: { icon: React.ReactNode, 
 
 export default function LearnMore() {
   const navigate = useNavigate();
-
+  
+  // No need for a useEffect hook for theme preservation
+  
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -320,6 +322,13 @@ export default function LearnMore() {
         staggerChildren: 0.1
       }
     }
+  };
+
+  // Function to navigate back to home while preserving theme
+  const navigateToHome = () => {
+    // Set flag to preserve theme when returning to landing page
+    localStorage.setItem("preserveTheme", "true");
+    navigate("/");
   };
 
   return (
@@ -413,7 +422,7 @@ export default function LearnMore() {
           >
             <Button 
               size="lg"
-              onClick={() => navigate("/")}
+              onClick={navigateToHome}
               variant="outline"
               className="mr-4"
             >

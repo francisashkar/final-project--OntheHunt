@@ -1,0 +1,79 @@
+/* Logo styling to ensure consistency throughout the site */
+
+/* Target any logo image to ensure consistency */
+img[alt="OnTheHunt Logo"],
+.logo-image {
+  /* Light mode styles */
+  filter: contrast(1.05) saturate(1.1);
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Dark mode version */
+.dark img[alt="OnTheHunt Logo"],
+.dark .logo-image {
+  filter: brightness(1.4) contrast(1.15) saturate(1.1) drop-shadow(0 0 4px rgba(34, 197, 94, 0.4));
+}
+
+/* Hover effects */
+img[alt="OnTheHunt Logo"]:hover,
+.logo-image:hover {
+  transform: scale(1.05);
+  filter: contrast(1.1) saturate(1.2) drop-shadow(0 0 8px rgba(34, 197, 94, 0.3));
+}
+
+.dark img[alt="OnTheHunt Logo"]:hover,
+.dark .logo-image:hover {
+  filter: brightness(1.5) contrast(1.2) saturate(1.2) drop-shadow(0 0 12px rgba(34, 197, 94, 0.6));
+}
+
+/* Animated glow effect for all logos */
+@keyframes logo-glow {
+  0% {
+    filter: contrast(1.05) saturate(1.1) drop-shadow(0 0 4px rgba(34, 197, 94, 0.3));
+  }
+  50% {
+    filter: contrast(1.1) saturate(1.2) drop-shadow(0 0 8px rgba(34, 197, 94, 0.5));
+  }
+  100% {
+    filter: contrast(1.05) saturate(1.1) drop-shadow(0 0 4px rgba(34, 197, 94, 0.3));
+  }
+}
+
+@keyframes logo-glow-dark {
+  0% {
+    filter: brightness(1.2) saturate(1.1) drop-shadow(0 0 4px rgba(34, 197, 94, 0.4));
+  }
+  50% {
+    filter: brightness(1.3) saturate(1.2) drop-shadow(0 0 10px rgba(34, 197, 94, 0.6));
+  }
+  100% {
+    filter: brightness(1.2) saturate(1.1) drop-shadow(0 0 4px rgba(34, 197, 94, 0.4));
+  }
+}
+
+/* Apply animation to animated logos */
+img[alt="OnTheHunt Logo"].animated,
+.logo-image.animated {
+  animation: logo-glow 2s infinite alternate;
+}
+
+.dark img[alt="OnTheHunt Logo"].animated,
+.dark .logo-image.animated {
+  animation: logo-glow-dark 2s infinite alternate;
+}
+
+/* Ensure proper sizing */
+.logo-sm {
+  height: 20px !important;
+  width: auto !important;
+}
+
+.logo-md {
+  height: 32px !important;
+  width: auto !important;
+}
+
+.logo-lg {
+  height: 48px !important;
+  width: auto !important;
+} 

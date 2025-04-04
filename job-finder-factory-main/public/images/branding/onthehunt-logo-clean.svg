@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" width="600" height="200">
+  <!-- Magnifying glass handle -->
+  <path d="M140,130 L200,90" stroke="#4caf50" stroke-width="30" stroke-linecap="round" />
+  
+  <!-- Magnifying glass circle -->
+  <circle cx="250" cy="60" r="55" fill="white" stroke="#4caf50" stroke-width="12" />
+  
+  <!-- Professional person silhouette inside glass -->
+  <path d="M250,30 
+           A18,18 0 0 1 250,76 
+           A18,18 0 0 1 250,30 Z 
+           M230,76 
+           L270,76 
+           L280,110 
+           L220,110 Z" 
+        fill="#1e5c5c" />
+  
+  <!-- Text "onthehunt" -->
+  <text x="308" y="85" font-family="Arial, sans-serif" font-size="75" font-weight="bold" fill="#1e5c5c">nthehunt</text>
+</svg> 

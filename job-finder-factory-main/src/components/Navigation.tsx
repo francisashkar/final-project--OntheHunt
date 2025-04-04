@@ -51,25 +51,41 @@ export default function Navigation() {
   // Check if current page is an auth page (signin or signup)
   const isAuthPage = location.pathname === '/signin' || location.pathname === '/signup';
 
-  const navItems = [
-    { label: "Home", path: isLoggedIn ? "/welcome" : "/" },
-    { label: "Learn More", path: "/learn-more" },
-    { label: "Find Jobs", path: "/jobs" },
-    { label: "Resume Builder", path: "/resume-builder" },
-    { label: "Career Chat", path: "/career-assistant" },
-  ];
+  // Define nav items based on login status
+  const getNavItems = () => {
+    // Base nav items for all users
+    const items = [
+      { label: "Home", path: isLoggedIn ? "/welcome" : "/" },
+    ];
+    
+    // Only add Learn More for non-logged in users
+    if (!isLoggedIn) {
+      items.push({ label: "Learn More", path: "/learn-more" });
+    }
+    
+    // Add these items for all users
+    items.push(
+      { label: "Find Jobs", path: "/jobs" },
+      { label: "Resume Builder", path: "/resume-builder" },
+      { label: "Career Chat", path: "/career-assistant" }
+    );
+    
+    // Add Dashboard link for logged in users
+    if (isLoggedIn) {
+      items.push({ label: "Dashboard", path: "/dashboard" });
+    }
+    
+    return items;
+  };
 
-  // Add Dashboard link for logged in users
-  if (isLoggedIn) {
-    navItems.push({ label: "Dashboard", path: "/dashboard" });
-  }
+  const navItems = getNavItems();
 
   return (
     <nav className="border-b bg-background">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link to="/">
-            <Logo variant="default" />
+            <Logo variant="animated" className="logo-image animated" />
           </Link>
           
           {/* Only show navigation items if not on auth pages */}

@@ -3,33 +3,30 @@ import { ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useScroll } from "@/hooks/use-scroll";
-import Logo from "../Logo";
+import DualHandsInteraction from "../DualHandsInteraction";
 
 export default function HeroSection() {
   const { scrollTo } = useScroll();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8 text-center relative">
+    <div className="flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden bg-gradient-to-br from-green-100 via-white to-green-200 dark:from-green-950 dark:via-gray-900 dark:to-green-900">
+      {/* Green gradient overlay for added depth */}
+      <div className="absolute inset-0 bg-gradient-radial from-green-300/20 to-transparent dark:from-green-500/10"></div>
+      
+      <DualHandsInteraction />
+      
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="space-y-6 max-w-4xl"
+        className="space-y-6 max-w-4xl relative z-10"
       >
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-        >
-          <Logo size="lg" variant="animated" className="mx-auto mb-8" />
-        </motion.div>
-        
         <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-foreground">
           Your <span className="text-primary dark:text-primary">Career Journey</span> Starts Here
         </h1>
         
         <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-          Let AI-powered insights guide you to the perfect job match, with personalized tools for every step of your career path.
+          <span className="font-semibold text-primary">OnTheHunt:</span> AI-Powered Career Platform - Let AI-powered insights guide you to the perfect job match, with personalized tools for every step of your career path.
         </p>
         
         <div className="flex flex-wrap gap-4 justify-center mt-8">
@@ -57,10 +54,19 @@ export default function HeroSection() {
             <Link to="/learn-more">Learn More</Link>
           </Button>
         </div>
+        
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="text-sm text-muted-foreground mt-8"
+        >
+          Experience "The Creation of AI" by clicking the button below to control the AI hand
+        </motion.p>
       </motion.div>
 
       <div 
-        className="absolute bottom-8 cursor-pointer"
+        className="absolute bottom-8 cursor-pointer z-10"
         onClick={() => scrollTo("features")}
       >
         <motion.div

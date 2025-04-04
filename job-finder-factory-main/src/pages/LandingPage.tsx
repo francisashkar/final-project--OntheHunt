@@ -21,21 +21,21 @@ export default function LandingPage() {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  // Note: Theme preservation is now handled by ThemeToggle component
+  // This useEffect is simplified to only set light mode when NOT coming from Learn More
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "light";
-    const root = window.document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(savedTheme);
-
-    if (!localStorage.getItem("darkModeMessageShown") && savedTheme === "light") {
-      toast({
-        title: "Hey there!!",
-        description: "You can use our dark mode, it's cooler!",
-        duration: 5000,
-      });
-      localStorage.setItem("darkModeMessageShown", "true");
+    // Check if we should preserve the theme (coming from Learn More page)
+    const shouldPreserveTheme = localStorage.getItem("preserveTheme") === "true";
+    
+    // Only force light mode if we're not preserving theme
+    if (!shouldPreserveTheme) {
+      // Set light mode as default
+      localStorage.setItem("theme", "light");
+      const root = window.document.documentElement;
+      root.classList.remove("dark", "light");
+      root.classList.add("light");
     }
-  }, [toast]);
+  }, []);
 
   return (
     <div className="relative">

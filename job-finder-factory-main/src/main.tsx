@@ -2,6 +2,7 @@ import React from "react";
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import './index.css'
+import './components/hunting-parallax/Logo.css'
 
 // Apply theme from localStorage or default to system preference
 const theme = localStorage.getItem("theme") || "light";

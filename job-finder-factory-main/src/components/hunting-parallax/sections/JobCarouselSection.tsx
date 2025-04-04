@@ -463,7 +463,7 @@ export default function JobCarouselSection() {
                       </CardContent>
                       <CardFooter className="pt-2">
                         <Button asChild variant="default" className="w-full">
-                          <Link to={`/jobs/${job._id}`}>
+                          <Link to="/signup">
                             View Details
                           </Link>
                         </Button>

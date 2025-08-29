@@ -6,6 +6,9 @@ import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-route
 import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { ProtectedRoute as FirebaseProtectedRoute } from "@/components/auth/ProtectedRoute";
 
 // Import pages
 import LandingPage from "./pages/LandingPage";
@@ -32,38 +35,18 @@ const NavigationWrapper = () => {
 
 // Auth redirect component - redirects based on authentication status
 const AuthRedirect = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  
-  useEffect(() => {
-    const token = localStorage.getItem("auth_token");
-    setIsAuthenticated(!!token);
-  }, []);
+  const { currentUser, loading } = useAuth();
   
   // Show nothing while checking auth status
-  if (isAuthenticated === null) {
+  if (loading) {
     return null;
   }
   
   // Redirect to welcome if authenticated, landing page if not
-  return isAuthenticated ? <Navigate to="/welcome" replace /> : <LandingPage />;
+  return currentUser ? <Navigate to="/welcome" replace /> : <LandingPage />;
 };
 
-// Protected route component - redirects to landing if not authenticated
-const ProtectedRoute = ({ element }: { element: React.ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  
-  useEffect(() => {
-    const token = localStorage.getItem("auth_token");
-    setIsAuthenticated(!!token);
-  }, []);
-  
-  // Show nothing while checking auth status
-  if (isAuthenticated === null) {
-    return null;
-  }
-  
-  return isAuthenticated ? <>{element}</> : <Navigate to="/" replace />;
-};
+
 
 // Routes that should display the footer
 const routesWithFooter = ["/app"]; // Add routes that should not have the footer
@@ -74,39 +57,43 @@ export function App() {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          {/* Top Navigation - conditionally rendered */}
-          <Routes>
-            <Route path="*" element={<NavigationWrapper />} />
-          </Routes>
-          
-          {/* Page Routes */}
-          <Routes>
-            {/* The root path now uses AuthRedirect to determine where to go */}
-            <Route path="/" element={<AuthRedirect />} />
+        <AuthProvider>
+          <ThemeProvider>
+            <BrowserRouter>
+            {/* Top Navigation - conditionally rendered */}
+            <Routes>
+              <Route path="*" element={<NavigationWrapper />} />
+            </Routes>
             
-            {/* Protected routes - require authentication */}
-            <Route path="/welcome" element={<ProtectedRoute element={<Welcome />} />} />
-            <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} />} />
-            <Route path="/app" element={<ProtectedRoute element={<Index />} />} />
-            <Route path="/find-jobs" element={<ProtectedRoute element={<FindJobs />} />} />
-            <Route path="/resume-builder" element={<ProtectedRoute element={<ResumeBuilder />} />} />
-            <Route path="/career-assistant" element={<ProtectedRoute element={<CareerAssistant />} />} />
-            <Route path="/jobs" element={<ProtectedRoute element={<FindJobs />} />} />
+            {/* Page Routes */}
+            <Routes>
+              {/* The root path now uses AuthRedirect to determine where to go */}
+              <Route path="/" element={<AuthRedirect />} />
+              
+              {/* Protected routes - require authentication */}
+              <Route path="/welcome" element={<FirebaseProtectedRoute><Welcome /></FirebaseProtectedRoute>} />
+              <Route path="/dashboard" element={<FirebaseProtectedRoute><Dashboard /></FirebaseProtectedRoute>} />
+              <Route path="/app" element={<FirebaseProtectedRoute><Index /></FirebaseProtectedRoute>} />
+              <Route path="/find-jobs" element={<FirebaseProtectedRoute><FindJobs /></FirebaseProtectedRoute>} />
+              <Route path="/resume-builder" element={<FirebaseProtectedRoute><ResumeBuilder /></FirebaseProtectedRoute>} />
+              <Route path="/career-assistant" element={<FirebaseProtectedRoute><CareerAssistant /></FirebaseProtectedRoute>} />
+              <Route path="/jobs" element={<FirebaseProtectedRoute><FindJobs /></FirebaseProtectedRoute>} />
+              
+              {/* Public routes - available to all */}
+              <Route path="/learn-more" element={<LearnMore />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/signin" element={<SignIn />} />
+            </Routes>
             
-            {/* Public routes - available to all */}
-            <Route path="/learn-more" element={<LearnMore />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
-          </Routes>
-          
-          {/* Footer - only show on non-landing routes and specific routes */}
-          <Routes>
-            <Route path="*" element={<FooterWrapper />} />
-          </Routes>
-        </BrowserRouter>
+            {/* Footer - only show on non-landing routes and specific routes */}
+            <Routes>
+              <Route path="*" element={<FooterWrapper />} />
+            </Routes>
+          </BrowserRouter>
+            </ThemeProvider>
+        </AuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

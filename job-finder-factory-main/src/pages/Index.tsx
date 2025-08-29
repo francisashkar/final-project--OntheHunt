@@ -19,18 +19,17 @@ export default function Index() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") || "light";
-    const root = window.document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(savedTheme);
-
-    if (!localStorage.getItem("darkModeMessageShown") && savedTheme === "light") {
-      toast({
-        title: "Hey there!!",
-        description: "You can use our dark mode, it's cooler!",
-        duration: 5000,
-      });
-      localStorage.setItem("darkModeMessageShown", "true");
+    // Only show the dark mode message once, don't force theme changes
+    if (!localStorage.getItem("darkModeMessageShown")) {
+      const savedTheme = localStorage.getItem("theme") || "light";
+      if (savedTheme === "light") {
+        toast({
+          title: "Hey there!!",
+          description: "You can use our dark mode, it's cooler!",
+          duration: 5000,
+        });
+        localStorage.setItem("darkModeMessageShown", "true");
+      }
     }
   }, [toast]);
 

@@ -5,13 +5,12 @@ import { Button } from "@/components/ui/button";
 import Logo from "./Logo";
 import { cn } from "@/lib/utils";
 import { Moon, Sun } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function LandingHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    return document.documentElement.classList.contains("dark");
-  });
+  const { theme, toggleTheme } = useTheme();
+  const isDarkMode = theme === 'dark';
   const { scrollTo } = useScroll();
   const location = useLocation();
   const isLearnMorePage = location.pathname === "/learn-more";
@@ -47,16 +46,14 @@ export default function LandingHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   
-  // Toggle theme
-  const toggleTheme = () => {
-    const root = document.documentElement;
-    const newTheme = root.classList.contains("dark") ? "light" : "dark";
+  // Toggle theme using the context
+  const handleThemeToggle = () => {
+    toggleTheme();
     
-    root.classList.remove("dark", "light");
-    root.classList.add(newTheme);
-    
-    localStorage.setItem("theme", newTheme);
-    setIsDarkMode(newTheme === "dark");
+    // If we're on the learn more page, set a flag to preserve the theme
+    if (isLearnMorePage) {
+      localStorage.setItem("preserveTheme", "true");
+    }
   };
 
   // Function to handle navigation
@@ -113,7 +110,7 @@ export default function LandingHeader() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={toggleTheme}
+            onClick={handleThemeToggle}
             className="rounded-full"
             aria-label="Toggle theme"
           >

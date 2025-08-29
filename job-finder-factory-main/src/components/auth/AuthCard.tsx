@@ -45,7 +45,7 @@ export function AuthCard({
   }, []);
 
   return (
-    <div className={`w-full ${isDesktop ? "max-w-3xl" : "max-w-lg"}`}>
+    <div className={`w-full ${isDesktop ? "max-w-xl" : "max-w-md"}`}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

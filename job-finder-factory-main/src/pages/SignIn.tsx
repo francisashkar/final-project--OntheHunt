@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { AuthCard } from "@/components/auth/AuthCard";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useAuth } from "@/contexts/AuthContext";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -27,7 +28,9 @@ const formSchema = z.object({
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const { signIn, signInWithGoogle } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,47 +43,63 @@ export default function SignIn() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Here you would typically handle the signin logic
-      console.log("Form submitted:", values);
+      setIsLoading(true);
+      await signIn(values.email, values.password);
       
-      // Store a token to indicate user is logged in
-      localStorage.setItem('auth_token', 'demo_token');
-      
-      // Store user info
-      localStorage.setItem('user_name', 'John Doe');
-      localStorage.setItem('user_email', values.email);
-      
-      // Show success message
-      toast.success("Signed in successfully! Redirecting to welcome page...");
-      
-      // Redirect to welcome page after a short delay
-      setTimeout(() => {
-        navigate("/welcome");
-      }, 1500);
+      // Redirect to welcome page
+      navigate("/welcome");
     } catch (error) {
-      toast.error("Invalid email or password");
+      console.error("Sign in error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleSocialLogin = (provider: string) => {
-    toast.info(`Signing in with ${provider}...`);
-    // In a real app, you would implement OAuth login here
-    
-    setTimeout(() => {
-      localStorage.setItem('auth_token', `${provider}_demo_token`);
-      localStorage.setItem('user_name', 'John Doe');
-      localStorage.setItem('user_email', 'john.doe@example.com');
-      toast.success(`Successfully signed in with ${provider}!`);
+  const handleSocialLogin = async (provider: string) => {
+    try {
+      setIsLoading(true);
+      if (provider === "Google") {
+        await signInWithGoogle();
+      }
+      
+      // Redirect to welcome page
       navigate("/welcome");
-    }, 1500);
+    } catch (error) {
+      console.error("Social login error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 pt-0 bg-background">
+    <div className="min-h-screen flex items-center justify-center p-4 pt-0 bg-background relative overflow-hidden">
+      {/* Rick leaning on the form - moved to left side */}
+      <motion.div 
+        initial={{ opacity: 0, x: -100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.7, delay: 0.5 }}
+        className="absolute left-[-10%] md:left-[2%] lg:left-[12%] xl:left-[22%] bottom-[19%] z-10 pointer-events-none"
+        style={{ 
+          height: '100%', 
+          maxHeight: '600px', 
+          display: 'flex', 
+          alignItems: 'flex-end', 
+          transform: 'translateY(-40px)'
+        }}
+      >
+        <img 
+          src="/rick.png" 
+          alt="Rick" 
+          className="h-[90%] max-h-[600px] object-contain" 
+          style={{ transformOrigin: 'bottom left' }}
+        />
+      </motion.div>
+      
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        className="z-20"
       >
         <AuthCard
           title="Welcome Back"
@@ -124,7 +143,7 @@ export default function SignIn() {
                           type="button"
                           variant="ghost"
                           size="icon"
-                          className="absolute right-2 top-1/2 -translate-y-1/2"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-foreground"
                           onClick={() => setShowPassword(!showPassword)}
                         >
                           {showPassword ? (
@@ -166,8 +185,15 @@ export default function SignIn() {
                 </Button>
               </div>
 
-              <Button type="submit" className="w-full">
-                Sign In
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing In...
+                  </>
+                ) : (
+                  'Sign In'
+                )}
               </Button>
             </form>
           </Form>
@@ -183,7 +209,12 @@ export default function SignIn() {
             </div>
 
             <div className="mt-4 flex gap-2">
-              <Button variant="outline" className="w-full" onClick={() => handleSocialLogin("Google")}>
+              <Button 
+                variant="outline" 
+                className="w-full" 
+                onClick={() => handleSocialLogin("Google")}
+                disabled={isLoading}
+              >
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                   <path
                     d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -202,20 +233,24 @@ export default function SignIn() {
                     fill="#EA4335"
                   />
                 </svg>
-                Google
-              </Button>
-              <Button variant="outline" className="w-full" onClick={() => handleSocialLogin("GitHub")}>
-                <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
-                  <path
-                    d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"
-                    fill="currentColor"
-                  />
-                </svg>
-                GitHub
+                {isLoading ? 'Signing In...' : 'Google'}
               </Button>
             </div>
           </div>
         </AuthCard>
+      </motion.div>
+      
+      {/* Speech bubble - moved to match Rick's new position */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 1.2 }}
+        className="absolute top-[18%] left-[15%] md:left-[23%] lg:left-[28%] z-30 bg-white dark:bg-slate-800 p-4 rounded-xl max-w-[230px] shadow-lg pointer-events-none"
+        style={{ 
+          clipPath: 'polygon(0% 0%, 100% 0%, 100% 75%, 50% 75%, 30% 100%, 15% 75%, 0% 75%)'
+        }}
+      >
+        <p className="text-sm font-medium text-foreground">Wubba lubba dub dub! Sign in already!</p>
       </motion.div>
     </div>
   );

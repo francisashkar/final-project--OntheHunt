@@ -21,21 +21,8 @@ export default function LandingPage() {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Note: Theme preservation is now handled by ThemeToggle component
-  // This useEffect is simplified to only set light mode when NOT coming from Learn More
-  useEffect(() => {
-    // Check if we should preserve the theme (coming from Learn More page)
-    const shouldPreserveTheme = localStorage.getItem("preserveTheme") === "true";
-    
-    // Only force light mode if we're not preserving theme
-    if (!shouldPreserveTheme) {
-      // Set light mode as default
-      localStorage.setItem("theme", "light");
-      const root = window.document.documentElement;
-      root.classList.remove("dark", "light");
-      root.classList.add("light");
-    }
-  }, []);
+  // Theme is now handled globally by the ThemeToggle component
+  // No need to force any specific theme here
 
   return (
     <div className="relative">

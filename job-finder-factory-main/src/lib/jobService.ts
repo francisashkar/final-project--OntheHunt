@@ -13,7 +13,42 @@ export interface Job {
   description?: string;
   tags?: string[];
   salary?: string;
+  matchScore?: number;
 }
+
+/**
+ * Helper function to move a job to the career chat
+ * Returns true if job was added, false if already exists
+ */
+export const moveJobToChat = (job: Job) => {
+  // Get existing chat references or initialize empty array
+  const chatReferences = JSON.parse(localStorage.getItem('chatReferences') || '[]');
+  
+  // Check if job already exists in references
+  const jobExists = chatReferences.some((ref: any) => 
+    ref.link === job.link && ref.Title === job.Title && ref.company === job.company
+  );
+  
+  // Only add if job doesn't already exist in references
+  if (!jobExists) {
+    // Add job with timestamp
+    chatReferences.push({
+      ...job,
+      addedAt: new Date().toISOString(),
+      type: 'job_reference'
+    });
+    
+    // Save back to localStorage
+    localStorage.setItem('chatReferences', JSON.stringify(chatReferences));
+    
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new Event('chatReferencesUpdated'));
+    
+    return true;
+  }
+  
+  return false;
+};
 
 export const getJobs = async (): Promise<Job[]> => {
   try {
@@ -28,10 +63,10 @@ export const getJobs = async (): Promise<Job[]> => {
       location: job.location,
       uploaded: job.uploaded,
       score: job.score,
-      // Add default values for properties not in the API
-      description: "No description available",
-      tags: ["Python", "Data Science", "ML"],
-      salary: "$70,000 - $120,000"
+      // Use description from API or provide default
+      description: job.description || "No description available",
+      tags: job.tags || ["Python", "Data Science", "ML"],
+      salary: job.salary || "$70,000 - $120,000"
     }));
   } catch (error) {
     console.error("Error fetching jobs:", error);

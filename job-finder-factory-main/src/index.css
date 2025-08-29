@@ -27,24 +27,24 @@
   }
 
   .dark {
-    --background: 20 14.3% 4.1%;
+    --background: 222 47% 11%;
     --foreground: 0 0% 95%;
-    --card: 24 9.8% 10%;
+    --card: 222 47% 11%;
     --card-foreground: 0 0% 95%;
-    --popover: 0 0% 9%;
+    --popover: 222 47% 11%;
     --popover-foreground: 0 0% 95%;
     --primary: 142.1 70.6% 45.3%;
     --primary-foreground: 144.9 80.4% 10%;
-    --secondary: 240 3.7% 15.9%;
+    --secondary: 217 33% 17%;
     --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 12 6.5% 15.1%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 17%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
     --ring: 142.4 71.8% 29.2%;
   }
 
@@ -74,6 +74,61 @@
   
   .animate-float {
     animation: float 6s ease-in-out infinite;
+  }
+  
+  /* Line clamp utilities for text truncation */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  
+  .line-clamp-4 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+  
+  /* Custom scrollbar styling */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 3px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.3);
+    border-radius: 3px;
+    transition: background 0.2s ease;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
+  }
+  
+  /* Firefox scrollbar */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.3) transparent;
   }
 }
 
@@ -155,7 +210,7 @@
 }
 
 .dark .glass-card {
-  background: rgba(17, 24, 39, 0.7);
+  background: rgba(16, 23, 42, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 
     0 8px 32px 0 rgba(0, 0, 0, 0.3),
@@ -190,7 +245,7 @@
 }
 
 .dark .glass-navbar {
-  background: rgba(17, 24, 39, 0.85);
+  background: rgba(16, 23, 42, 0.85);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
 }
@@ -318,3 +373,15 @@
     width: 24vw !important;
   }
 }
+
+/* Light mode only classes - these will have NO effect in dark mode */
+.light-mode-green-gradient {
+  @apply bg-gradient-to-br from-green-100 via-white to-green-200;
+}
+
+.light-mode-green-glow {
+  @apply bg-gradient-radial from-green-300/20 to-transparent;
+}
+
+/* The dark: variant would normally override these, but since we're not using
+   dark: classes on these elements, the dark theme variables will be used instead */

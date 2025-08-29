@@ -34,6 +34,7 @@ cd backend
 flask run
 
 # Terminal 3: AI Service
+cd backend
 npm start
 ```
 

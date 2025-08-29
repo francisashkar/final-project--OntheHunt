@@ -8,17 +8,32 @@ A modern job search platform built with React, Flask, and AI-powered features.
 - Node.js (v18+)
 - Python 3.8+
 - MongoDB
+- Git
+
+### Install Dependencies
+```bash
+# Frontend
+npm install
+
+# Backend
+cd backend
+pip install Flask==3.0.0 Flask-CORS==4.0.0 pymongo==4.6.0 python-dotenv==1.0.0 Werkzeug==3.0.1 requests==2.31.0 Pillow==10.1.0 numpy==1.24.3 pandas==2.0.3 scikit-learn==1.3.0 python-dateutil==2.8.2
+
+# AI Service
+cd ../backend
+npm install
+```
 
 ### Run the Project
 ```bash
-# 1. Frontend (React)
+# Terminal 1: Frontend (React)
 npm run dev
 
-# 2. Backend (Flask + MongoDB)
+# Terminal 2: Backend (Flask)
 cd backend
 flask run
 
-# 3. AI Service
+# Terminal 3: AI Service
 npm start
 ```
 

@@ -11,7 +11,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true })); // Parse URL-enc
 
 // Initialize OpenAI client with API key from environment
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "sk-bGtWzDSqsSRnq1-fTmzUvL45NDaFTtgdB8einf1dIzT3BlbkFJ5Klfe0XvnlKe6ipv8pa_1pLwJhyXcOTyd1e864ToMA",
+  apiKey: process.env.OPENAI_API_KEY || "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",
 });
 
 // Enhanced system prompt for guiding AI responses

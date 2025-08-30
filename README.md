@@ -48,7 +48,6 @@ A modern, full-stack job search platform powered by AI that helps users find job
 ### Database & Services
 - **Firebase** - Authentication, Firestore database
 - **MongoDB** - Job data storage
-- **Firebase Storage** - File uploads (profile images)
 
 ## 📋 Prerequisites
 
@@ -79,23 +78,9 @@ cd backend
 npm install
 cd ..
 ```
-
+pip install flask flask-cors pymongo openai
 ### 3. Environment Setup
-
-#### Create Backend Environment File
-Create a `.env` file in the `backend` folder:
-```bash
-cd backend
-echo "OPENAI_API_KEY=your_openai_api_key_here" > .env
-```
-
-**Important**: Replace `your_openai_api_key_here` with your actual OpenAI API key.
-
-#### Get OpenAI API Key
-1. Go to [OpenAI Platform](https://platform.openai.com/api-keys)
-2. Sign in or create an account
-3. Click "Create new secret key"
-4. Copy the key and paste it in your `.env` file
+for openapi key please contact us!
 
 ### 4. Run the Project
 
@@ -134,66 +119,6 @@ npm run dev          # Start with nodemon (auto-restart)
 npm start            # Start production server
 ```
 
-## 🌐 API Endpoints
-
-### AI Features
-- `POST /api/chat` - AI career advisor chat
-- `POST /api/analyze-job` - Job posting analysis
-- `POST /api/resume-feedback` - Resume optimization feedback
-- `POST /api/interview-prep` - Interview preparation guidance
-
-### Job Management
-- `GET /api/jobs` - Fetch all jobs
-- `GET /api/jobs/featured` - Get featured jobs
-- `POST /api/jobs` - Create new job posting
-
-### User Management
-- `POST /api/upload-profile-image` - Upload user avatar
-- `GET /api/profile-image/:userId` - Get user profile image
-- `DELETE /api/delete-profile-image` - Remove profile image
-
-### Health & Testing
-- `GET /api/health` - Server health check
-- `POST /api/test` - Test OpenAI integration
-
-## 🔐 Environment Variables
-
-### Required Environment Variables
-```env
-# Backend (.env file)
-OPENAI_API_KEY=sk-your-actual-api-key-here
-
-# Frontend (.env.local file - optional)
-VITE_FIREBASE_API_KEY=your_firebase_key
-VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your_project_id
-```
-
-## 🚨 Troubleshooting
-
-### Common Issues
-
-#### 1. "OPENAI_API_KEY environment variable is missing"
-- Check that your `.env` file exists in the `backend` folder
-- Verify the API key format: `OPENAI_API_KEY=sk-...`
-- Restart your backend server after making changes
-
-#### 2. "Module not found" errors
-- Run `npm install` in both root and backend folders
-- Clear `node_modules` and reinstall: `rm -rf node_modules && npm install`
-
-#### 3. Port already in use
-- Change ports in your configuration files
-- Kill processes using the ports: `npx kill-port 3001 5173`
-
-#### 4. CORS errors
-- Ensure your backend is running on port 3001
-- Check that CORS is properly configured in `server.js`
-
-### Getting Help
-- Check the console for error messages
-- Verify all environment variables are set
-- Ensure both frontend and backend servers are running
 
 ## 📱 Features in Detail
 
